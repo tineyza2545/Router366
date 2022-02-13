@@ -23,13 +23,13 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn to="/" target="_blank" text>
+      <v-btn to="/" text>
         <span class="mr-2">Home</span>
       </v-btn>
-      <v-btn to="/About" target="_blank" text>
+      <v-btn to="/About" text>
         <span class="mr-2">About</span>
       </v-btn>
-      <v-btn to="/Shop" target="_blank" text>
+      <v-btn to="/Shop" text>
         <span class="mr-2">Shop</span>
       </v-btn>
     </v-app-bar>

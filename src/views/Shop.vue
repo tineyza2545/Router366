@@ -8,6 +8,7 @@
         max-width="344"
         v-for="(product, index) in productList"
         :key="index"
+        :style="product1"
       >
         <v-img :src="product.image" height="200px"></v-img>
 
@@ -34,12 +35,27 @@
               name: 'detail',
               params: { id: product.id, description: product.description },
             }"
+            @click="showpro(1)"
           >
             รายละเอียด
           </v-btn>
           <div>
-            <button class="btn btn-success" @click="addCart(product)">
-              หยิบตะกร้า
+            <button class="btn btn-outline-success" @click="addCart(product)">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                fill="currentColor"
+                class="bi bi-cart-plus"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9V5.5z"
+                />
+                <path
+                  d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"
+                />
+              </svg>
             </button>
           </div>
 
@@ -57,58 +73,96 @@
             <v-card-text> category : {{ product.category }} </v-card-text>
           </div>
         </v-expand-transition>
-      </v-card>
-      <v-container>
-        <v-card>
-          <div class="container col-md-12" v-if="carts != 0">
-            <h4>ตะกร้าสินค้า</h4>
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">ไอดี</th>
-                  <th scope="col">ภาพสินค้า</th>
-                  <th scope="col">ชื่อ</th>
-                  <th scope="col">ราคา</th>
-                  <th scope="col">จำนวน</th>
-                  <th scope="col">ยอดรวม</th>
-                  <th scope="col">ลบ</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(item, index) in carts" :key="index">
-                  <td>{{ item.id }}</td>
-                  <td><img :src="item.image" height="50px" width="50px" /></td>
-                  <td>{{ item.name }}</td>
-                  <td>{{ item.price }}</td>
-                  <td>
-                    <i class="fa fa-plus qty-plus" @click="plusqty(item)"></i>
-                    {{ item.qty }}
-                    <i
-                      class="fa fa-minus qty-minus"
-                      @click="minusqty(item)"
-                    ></i>
-                  </td>
-                  <td>{{ item.total }}</td>
-                  <td>
-                    <button @click="removeproduct(item)" class="btn btn-danger">
-                      <i class="fa fa-trash"></i>
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-            <v-card-footer>
-              <center>
-                <h3>PAY : {{ total() }} $</h3>
-              </center>
-            </v-card-footer>
+        <div class="contaiiner">
+          <div class="fixed-bottom" style="margin-left: 90%; margin-bottom: 1%">
+            <button class="btn btn-warning" @click="showpro(2)">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="50"
+                height="50"
+                fill="currentColor"
+                class="bi bi-bag-plus"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5z"
+                />
+                <path
+                  d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"
+                />
+              </svg>
+              <span
+                class="white--text bg-black p-2 px-3"
+                style="border-radius: 75%"
+                >{{ sumsum() }}</span
+              >
+            </button>
           </div>
-        </v-card>
-      </v-container>
-      <v-container grid-list-xs class="green accent-2">
-        <router-view :key="$route.path"></router-view>
-      </v-container>
+        </div>
+      </v-card>
+    </v-container>
+    <div
+      class="fixed-bottom"
+      style="margin-left: 90%; margin-bottom: 1%"
+      :style="table"
+    >
+      <button class="btn btn-warning" @click="showpro(0)">back</button>
+    </div>
+    <v-container>
+      <v-card :style="table">
+        <div class="container col-md-12" v-if="carts != 0">
+          <h4>ตะกร้าสินค้า</h4>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">ไอดี</th>
+                <th scope="col">ภาพสินค้า</th>
+                <th scope="col">ชื่อ</th>
+                <th scope="col">ราคา</th>
+                <th scope="col">จำนวน</th>
+                <th scope="col">ยอดรวม</th>
+                <th scope="col">ลบ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in carts" :key="index">
+                <td>{{ item.id }}</td>
+                <td><img :src="item.image" height="50px" width="50px" /></td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.price }}</td>
+                <td>
+                  <i class="fa fa-plus qty-plus" @click="plusqty(item)"></i>
+                  {{ item.qty }}
+                  <i class="fa fa-minus qty-minus" @click="minusqty(item)"></i>
+                </td>
+                <td>{{ item.total }}</td>
+                <td>
+                  <button @click="removeproduct(item)" class="btn btn-danger">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <v-card-footer>
+            <center>
+              <button
+                class="btn btn-outline-success"
+                @click="showpro(0), removeproductzaza()"
+              >
+                <h3>PAY : {{ total() }} $</h3>
+              </button>
+            </center>
+          </v-card-footer>
+        </div>
+      </v-card>
+    </v-container>
+
+    <v-container grid-list-xs :style="detail">
+      <router-view :key="$route.path" class="green accent-2"></router-view>
+      <button class="btn btn-success mt-5" @click="showpro(0)">back</button>
     </v-container>
   </v-container>
 </template>
@@ -117,6 +171,9 @@
 export default {
   data() {
     return {
+      product1: "",
+      detail: "display: none",
+      table: "display: none",
       carts: [],
       aa1: 0,
       bb2: 0,
@@ -477,7 +534,8 @@ export default {
           price: 11,
           description: "It's a random box and you have to rely on your luck.",
           category: "random box",
-          image: "",
+          image:
+            "https://assets.bigcartel.com/product_images/281749949/AD9A4240-F63D-43E6-8E67-F132BBE2E60F.jpeg?auto=format&fit=max&w=900",
 
           rating: {
             rate: 2.1,
@@ -489,6 +547,35 @@ export default {
     };
   },
   methods: {
+    sumsum() {
+      let x = 0;
+      for (let index = 0; index < this.carts.length; index++) {
+        x += this.carts[index].qty;
+      }
+      return x;
+    },
+    showpro: function (index) {
+      switch (index) {
+        case 0:
+          this.product1 = "";
+          this.detail = "display: none";
+          this.table = "display: none";
+          break;
+        case 1:
+          this.product1 = "display: none";
+          this.detail = "";
+          this.table = "display: none";
+          break;
+        case 2:
+          this.product1 = "display: none";
+          this.detail = "display: none";
+          this.table = "";
+          break;
+
+        default:
+          break;
+      }
+    },
     addCart: function (product) {
       if (product.id == 1) {
         this.aa1 += 1;
@@ -796,6 +883,13 @@ export default {
         }
         if (item.id == 21) {
           this.uu21 = 0;
+        }
+      }
+    },
+    removeproductzaza() {
+      if (confirm("You want to pay all ??")) {
+        for (let index = 0; index < this.carts.length; index++) {
+          this.carts[index].qty = 0;
         }
       }
     },
